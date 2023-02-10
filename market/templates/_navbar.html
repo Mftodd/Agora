@@ -1,0 +1,23 @@
+<nav class="bg-gray-800 w-full flex justify-between items-center p-4">
+    <div class="flex flex-row justify-center items-center gap-4 text-slate-300">
+        <div class="flex justify-center items-center gap-2 px-4">
+            <h1>Agora</h1>
+            <img class="w-8" src="../../uploads/market/70888.png" alt="logo">
+        </div>
+        <a class="hover:text-slate-500" href="{% url 'home' %}">Home</a>
+        <a class="hover:text-slate-500" href="{% url 'home' %}">Market</a>
+    </div>
+
+    <div class="text-slate-200">
+        
+        {% if request.user.is_anonymous %}
+        <a class="px-4 py-2 mr-2 text-slate-200 border-solid border-[1px] border-white rounded-full hover:bg-gray-600" href="{% url 'login' %}">Login</a>
+        <a class="px-4 py-2 mr-2 text-gray-800 bg-slate-200 rounded-full hover:bg-slate-600" href="{% url 'signup' %}">Sign Up</a>
+        {% else %}
+        <a href="{% url 'new-listing' %}">Create</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+        
+    </div>
+</nav>

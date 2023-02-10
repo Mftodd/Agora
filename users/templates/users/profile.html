@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile - {{ user.username }}
+{% endblock %}
+
+<!-- # Profile:
+# account Address
+# Private key (hidden)
+# balance for the wallet -->
+
+{% block content %}
+<h3>Welcome back, {{ user.username }}</h3>
+<h1>Balance: {{ balance }}</h1>
+<!-- todo:  acct address copy to clipboard button -->
+<h4 id="address">Account</h4>
+{{ address }}<br>
+<!-- todo: hide private key behind button/fog effect -->
+<h4>Private Key</h4>
+{{ key }}
+<!-- todo: asset inventory -->
+<!-- todo: transaction history -->
+{% endblock %}
