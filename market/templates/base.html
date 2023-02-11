@@ -9,7 +9,7 @@
     <title>Agora</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'style.css' %}">
-    <script defer src="{% static 'main.js' %}"></script>
+    {% block page_scripts %}{% endblock %}
 </head>
 <body>
     {% include '_navbar.html' %}

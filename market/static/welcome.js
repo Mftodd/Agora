@@ -1,3 +1,6 @@
+
+
+// welcome
 let getWallet = document.querySelector("#get-wallet")
 
 

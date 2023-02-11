@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'tailwind',
     'web3',
+    'welcome',
 ]
 
 MIDDLEWARE = [

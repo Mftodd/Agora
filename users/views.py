@@ -65,7 +65,7 @@ def login(request):
 
 def logout(request):
     user_logout(request)
-    return redirect('home')
+    return redirect('welcome')
 
 # Profile
 @login_required

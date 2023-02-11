@@ -1,15 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Listings, Slideshow
+from .models import Listings, Slide
 from .forms import NewListingForm
 from django.contrib.auth.decorators import login_required
 
-def index(request):
+def market(request):
     
     listings = Listings.objects.all()
+    slides = Slide.objects.all()
     
     
     context = {
         'listings': listings,
+        'slides': slides,
     }
     
     return render(request, 'market/index.html', context)

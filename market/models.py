@@ -16,6 +16,14 @@ class Listings(models.Model):
     def __str__(self):
         return self.title + self.user.username
     
+class Slide(models.Model):
+    image = models.ImageField(upload_to="slideshow/")
+    title = models.CharField(max_length=150)
+    sub_title = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.title
+    
 # Market
 # Make Listings
 #  
