@@ -3,6 +3,7 @@
     "tailwindcss": "^3.2.6"
   },
   "dependencies": {
+    "ethers": "^6.0.3",
     "web3": "^1.8.2"
   },
   "scripts": {
@@ -10,4 +11,3 @@
     "tailwind-build": "tailwindcss -i ../input.css -o ../market/static/output.css --minify"
   }
 }
-

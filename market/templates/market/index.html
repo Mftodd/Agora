@@ -12,26 +12,27 @@ Market
 {% endblock %}
 
 {% block content %}
-<div class="w-[1600px] mx-auto">
+<div class="w-[1200px] mx-auto">
     
-    <!-- slideshow -->
-    <ul id="slideshow" class="list-none relative w-auto h-96 mx-auto my-2 p-0 ">
+    <!-- slideshow container -->
+    <ul id="slideshow" class="list-none relative w-full h-[500px] my-1">
 
-        
+        <!-- generate slides -->
         {% for slide in slides %}
             <li style="display:none" class="absolute top-0 left-0 right-0 bottom-0">
-                <img src="{{ slide.image.url }}" alt="" class="w-full h-full rounded-3xl">
-                <div>
-                    <p class="absolute top-0 text-md text-white">{{ slide.title }}</p>
-                    <p>{{ slide.sub_title }}</p>
-                    <button id="explore-btn" class="absolute right-48 bottom-16 border-2 border-black rounded-full px-8 py-2 bg-blue-900 text-white z-10 hover:bg-blue-600" href="">Explore</button>
+                <img src="{{ slide.image.url }}" alt="" class="w-full h-full rounded-lg">
+                <div class="absolute z-10 bottom-24 left-24 text-md text-white">
+                    <p class="text-4xl font-bold py-2">{{ slide.title }}</p>
+                    <p class="text-xl font-semibold pb-4">{{ slide.sub_title }}</p>
+                    <button id="explore-btn" class=" rounded-full px-8 py-2 bg-blue-900 text-white z-10 hover:bg-blue-600" href="">Explore</button>
                 </div>
                 <!-- <p>{{ slide.id }}</p>
                 <p>{{ slides.count }}</p> -->
             </li>
         {% endfor %}
 
-        <div class="pointer absolute flex items-center justify-between w-full h-full p-[16px] text-white font-bold text-lg border-2 border-black rounded-3xl">
+        <!-- forward backward buttons  -->
+        <div class="pointer absolute flex items-center justify-between w-full h-full p-[16px] text-white font-bold text-lg rounded-lg">
             <button id="prev" onclick="changeSlide(-1)">&#10094;</button>  
             <button id="next" onclick="changeSlide(1)">&#10095;</button>  
         </div>
@@ -39,26 +40,19 @@ Market
     </ul>
     
     <!-- listings -->
-    <div class="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
-        <div class="flex flex-wrap justify-center items-center mt-10">
+    <p class="text-3xl font-bold my-6">FEATURED LISTINGS</p>
+    <div class="flex w-full justify-center items-center 2xl:px-20">
+
+        <div class="flex flex-wrap justify-center items-center">
             
             {% for listing in listings %}
             <!-- listing card -->
-            <div class="bg-slate-600 m-4 flex flex-1 min-w-[200px] max-w-[250px] flex-col p-3 rounded-md hover:shadow-2xl">
+            <a class="bg-slate-600 mx-2 flex flex-1 min-w-[200px] max-w-[250px] flex-col p-3 rounded-md hover:shadow-2xl" href="{% url 'asset' listing.id %}">
                 <p class="text-xs text-slate-200">{{ listing.user.username }}</p>
                 <p class="text-xl text-slate-200">{{ listing.title }}</p>
-                <p class="text-2xl text-slate-200 flex items-center"><img src="../../../uploads/market/eth-glyph-colored.png" class="h-6 mx-1">{{ listing.price }}</p>
-                        
-                {% if listing.image %}
-                    <img src="{{listing.image.url}}" alt="" class="h-48 rounded-md shadow-lg object-cover">
-                {% endif %}
-                <p class="flex justify-between items-center">
-                    {{ listing.key }}
-                    <button id='trade' class="px-4 py-2 mr-2 mt-3 bg-gray-800 text-sm text-slate-200 border-solid border-[1px] border-white rounded-full hover:bg-gray-600">
-                        Trade
-                    </button>
-                </p>
-            </div>
+                <p class="text-2xl text-slate-200 flex items-center"><img src="../../../uploads/market/eth-glyph-colored.png" class="h-6 mx-1">{{ listing.price }}</p>          
+                <img src="{{listing.image.url}}" alt="" class="h-48 rounded-md shadow-lg object-cover">
+            </a>
             {% endfor %}
         
         </div>

@@ -1,22 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Listings, Slide
-from .forms import NewListingForm
+from .models import Asset, Slide
+from .forms import NewListingForm, OrderForm
 from django.contrib.auth.decorators import login_required
 
+
+# market home
 def market(request):
     
-    listings = Listings.objects.all()
+    listings = Asset.objects.all()
     slides = Slide.objects.all()
     
     
     context = {
         'listings': listings,
-        'slides': slides,
+        'slides': slides
     }
     
     return render(request, 'market/index.html', context)
 
 
+# create a new listing
 @login_required
 def new_listing(request):
     
@@ -38,22 +41,51 @@ def new_listing(request):
             image = form.cleaned_data['image']
             print(image)
             
-            new_listing = Listings()
-            new_listing.title = title
-            new_listing.key = key
-            new_listing.price = price
-            new_listing.image = image
-            new_listing.user = request.user
-            new_listing.save()
+            asset = Asset()
+            asset.title = title
+            asset.key = key
+            asset.price = price
+            asset.image = image
+            asset.user = request.user
+            asset.save()
             
             return redirect('home')
             
     context = {
         'form': form,
-        'listings': Listings.objects.all()
+        'listings': Asset.objects.all()
     }
             
     return render(request, 'market/new_listing.html', context)
             
-
-# Create your views here.
+# asset page
+def asset(request, asset_id):
+    
+    asset = get_object_or_404(Asset, id=asset_id)
+    
+    if request.method == "GET":
+        order_form = OrderForm()
+    
+    if request.method == "POST":
+        order_form = OrderForm(request.POST)
+        
+        if order_form.is_valid():
+            order = {'type':"", 
+                     'bid':"",
+                     'quantity':""}
+            order['type'] = order_form.cleaned_data['type']
+            order['bid'] = order_form.cleaned_data['bid']
+            order['quantity'] = order_form.cleaned_data['quantity']
+        
+            asset.order_book.append(order)
+            asset.save
+            
+            return(redirect('market'))
+    
+    context = {
+        'order_form': order_form,
+        'asset': asset,
+        'order_book': asset.order_book
+    }
+    
+    return render(request, 'market/asset.html', context)

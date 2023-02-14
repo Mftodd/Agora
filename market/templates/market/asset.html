@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block page_scripts %}
+    <script defer src="{% static 'asset.js' %}"></script>
+{% endblock %}
+
+
+{% block title %}
+Market
+{% endblock %}
+
+{% block content %}
+<!-- two columns one item summary includes picture & description 
+    one item main includes bidding section-->
+<div class="max-w-[1600px] mx-auto">
+    <div class='flex w-full justify-center mt-6 px-12'>
+        <div class="w-2/5">
+            <div class="w-full border-2 border-black rounded-lg h-[500px]">
+                <img src="{{ asset.image.url }}" alt="asset-image" class="object-contain w-full h-full pt-8 px-12">
+            </div>
+        </div>
+                
+                
+        <div class="w-3/5 p-4">
+            <div>
+                <p>Created by: {{ asset.user.username }}</p>
+                <p>{{ asset.title }}</p>
+                <p>Description<br>{{ asset.sub_title }}</p>
+            </div>
+            
+            <div class="w-full border-2 border-black rounded-lg my-4 p-4">
+                <p>Market Value {{ asset.price }}</p>
+                <form action="{% url 'asset' asset.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ order_form }}
+                    
+                    <button id="order-btn" type="submit" class="px-4 py-2 mr-2 mt-3 bg-gray-800 text-sm text-slate-200 border-solid border-[1px] border-white rounded-full hover:bg-gray-600">
+                    Order
+                    </button>
+                </form>
+                
+                <!-- order button will submit an order to the orderbook. 
+                    If the buy/sell order is matched with a bid, it will be bought/sold immediately. 
+                    If a price is set below FMV, it will be added to the order book & placed in the users cart until the price is matched with a bid. -->
+                
+                <!-- input slider for setting current price  -->
+            </div>
+            
+            <div class="w-full border-2 border-black rounded-lg my-4 p-4">
+                {% if order_book %}
+                <table>
+                    <th>Bid</th>
+                    <th>Ask</th>
+                    {% for order in order_book %}
+                        {% if order.order_type == "buy" %}
+                            <td>{{ order }}</td>
+                            <td></td>
+                        {% else %}
+                            <td></td>
+                            <td>{{ order }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+                {% else %}
+                <h1>The order book is empty</h1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="w-full mx-12 my-4">
+        Description:
+        {{ asset.description }}
+    </div>
+</div>
+
+{% endblock %}
