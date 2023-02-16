@@ -20,4 +20,45 @@ Profile - {{ user.username }}
 {{ key }}
 <!-- todo: asset inventory -->
 <!-- todo: transaction history -->
+
+<div class="w-full min-h-screen border-x-2 border-x-neutral-300 mx-auto">
+    <div class="w-full">
+        {% if posts %}
+        <div>
+            <div>
+                <p>Posts:</p>
+                {% for post in posts %}
+                    <div>
+                        <p>{{ post.body }}</p>
+                        {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="">
+                        {% endif %}
+                        <p>{{ post.created_date }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if assets %}
+        <div>
+            <div>
+                <p>Assets:</p>
+                {% for asset in assets %}
+                    <div>
+                        <p>{{ asset.body }}</p>
+                        {% if asset.image %}
+                        <img src="{{ asset.image.url }}" alt="">
+                        {% endif %}
+                        <p>{{ asset.created_date }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+
+
+
 {% endblock %}

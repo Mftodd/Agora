@@ -3,6 +3,8 @@ from .forms import LoginForm, SignUpForm
 from django.contrib.auth import authenticate, login as user_login, logout as user_logout
 from django.contrib.auth.decorators import login_required
 from .models import Wallet
+from market.models import Asset
+from forum.models import ForumPost
 from django.contrib.auth.models import User
 # from web3 import Web3
 
@@ -71,6 +73,8 @@ def logout(request):
 @login_required
 def profile(request):
     user = request.user
+    assets = Asset.objects.filter(user=user)
+    posts = ForumPost.objects.filter(user=user)
     
     # todo: need to save these to the user profile somehow.
     # address = Wallet.account.address
@@ -78,7 +82,8 @@ def profile(request):
     # balance = w3.eth.get_balance(address)
     context = {
         'user': user,
-        # 'address': address,
+        'assets': assets,
+        'posts': posts,
         # 'key': key,   
         # 'balance': balance
     }

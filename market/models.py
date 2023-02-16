@@ -11,7 +11,6 @@ class Asset(models.Model):
     # todo: price should automatically update to the last transaction price
     price = models.CharField(max_length=12, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
-    order_book = []
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def __str__(self):
@@ -21,9 +20,24 @@ class Slide(models.Model):
     image = models.ImageField(upload_to="market_slideshow/")
     title = models.CharField(max_length=150)
     sub_title = models.CharField(max_length=100)
+    featured = models.BooleanField(default=False)
+    welcome = models.BooleanField(default=False)
     
     def __str__(self):
         return self.title
+    
+class Offer(models.Model):
+    ORDER_TYPE = (
+        ("BUY",'buy'),
+        ("SELL",'Sell'),
+    )
+    value = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=1)
+    type = models.CharField(max_length=4, choices = ORDER_TYPE, default="BUY")
+    asset = models.IntegerField(null=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    fulfilled = models.BooleanField(default=False)
     
 
     

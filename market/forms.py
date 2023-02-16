@@ -1,5 +1,5 @@
 from django import forms
-from .models import Asset
+from .models import Asset, Offer
 
 class NewListingForm(forms.ModelForm):
     class Meta:
@@ -7,12 +7,11 @@ class NewListingForm(forms.ModelForm):
         fields = ("title", "price", "image", "description")
 
    
-class OrderForm(forms.Form):
-    order_types = ["Buy", "Sell"]
-    
-    type = forms.ChoiceField(choices=[order_types], required=True)
-    bid = forms.DecimalField(required=True)
-    quantity = forms.IntegerField(required=True)
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Offer
+        fields = ("value","quantity")
+
     
 # buy button
 # create a marketplace form 

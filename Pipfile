@@ -8,6 +8,8 @@ django = "*"
 pillow = "*"
 web3 = "*"
 django-tailwind = "*"
+django-crispy-forms = "*"
+crispy-tailwind = "*"
 
 [dev-packages]
 

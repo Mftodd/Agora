@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load tailwind_filters %}
 
 {% block page_scripts %}
     <script defer src="{% static 'asset.js' %}"></script>
@@ -15,7 +15,7 @@ Market
 <!-- two columns one item summary includes picture & description 
     one item main includes bidding section-->
 <div class="max-w-[1600px] mx-auto">
-    <div class='flex w-full justify-center mt-6 px-12'>
+    <div class='flex h-3/4 justify-center mt-6 px-12'>
         <div class="w-2/5">
             <div class="w-full border-2 border-black rounded-lg h-[500px]">
                 <img src="{{ asset.image.url }}" alt="asset-image" class="object-contain w-full h-full pt-8 px-12">
@@ -24,6 +24,7 @@ Market
                 
                 
         <div class="w-3/5 p-4">
+
             <div>
                 <p>Created by: {{ asset.user.username }}</p>
                 <p>{{ asset.title }}</p>
@@ -31,11 +32,12 @@ Market
             </div>
             
             <div class="w-full border-2 border-black rounded-lg my-4 p-4">
+
                 <p>Market Value {{ asset.price }}</p>
+
                 <form action="{% url 'asset' asset.id %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ order_form }}
-                    
                     <button id="order-btn" type="submit" class="px-4 py-2 mr-2 mt-3 bg-gray-800 text-sm text-slate-200 border-solid border-[1px] border-white rounded-full hover:bg-gray-600">
                     Order
                     </button>
@@ -48,31 +50,61 @@ Market
                 <!-- input slider for setting current price  -->
             </div>
             
-            <div class="w-full border-2 border-black rounded-lg my-4 p-4">
+            <div class="w-full border-2 border-black rounded-lg my-4 p-4 max-h-[200px] overflow-scroll">
                 {% if order_book %}
-                <table>
-                    <th>Bid</th>
-                    <th>Ask</th>
-                    {% for order in order_book %}
-                        {% if order.order_type == "buy" %}
-                            <td>{{ order }}</td>
-                            <td></td>
-                        {% else %}
-                            <td></td>
-                            <td>{{ order }}</td>
+                <div class="w-10/12">
+                    {% for offer in order_book %}
+                        {% if not offer.fulfilled %}
+                            <p>{{ offer.value }}</p>
+                            <p>{{ offer.user }}</p>
                         {% endif %}
                     {% endfor %}
-                </table>
+                </div>
                 {% else %}
                 <h1>The order book is empty</h1>
                 {% endif %}
             </div>
         </div>
     </div>
+    
     <div class="w-full mx-12 my-4">
         Description:
         {{ asset.description }}
     </div>
+
+    <!-- Comment Box -->
+    <div class=" w-full border-y-2 border-x-neutral-300">
+        <form action="{% url 'asset' asset.id %}" method="POST">
+            {% csrf_token %}
+            {{ review_form }}
+            <button type="submit">POST!</button>
+        </form>
+    </div>
+
+    <!-- Feed -->
+    <div class="w-full min-h-screen border-x-2 border-x-neutral-300 mx-auto">
+        <div class="w-full">
+            {% if reviews %}
+            {% for review in reviews %}
+            <div>
+                <div><img src="" alt="profile-photo"></div>
+                <p>{{ review.user.username }}</p>
+                <div>
+                    <p>{{ review.body }}</p>
+                    {% if review.image %}
+                    <img src="{{ review.image.url }}" alt="">
+                    {% endif %}
+                </div>
+                <p>{{ review.created_date }}</p>
+            </div>
+
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+
+
 </div>
 
 {% endblock %}

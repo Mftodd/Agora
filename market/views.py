@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Asset, Slide
+from .models import Asset, Slide, Offer
 from .forms import NewListingForm, OrderForm
+from forum.forms import NewPostForm
+from forum.models import ForumPost
 from django.contrib.auth.decorators import login_required
 
 
@@ -33,23 +35,18 @@ def new_listing(request):
         if form.is_valid():
             print(form.cleaned_data)
             title = form.cleaned_data['title']
-            if form.cleaned_data['key']:
-                key = form.cleaned_data['key']
-            else:
-                key = "0x1231241258719"
             price = form.cleaned_data['price']
             image = form.cleaned_data['image']
             print(image)
             
             asset = Asset()
             asset.title = title
-            asset.key = key
             asset.price = price
             asset.image = image
             asset.user = request.user
             asset.save()
             
-            return redirect('home')
+            return redirect('profile')
             
     context = {
         'form': form,
@@ -58,34 +55,74 @@ def new_listing(request):
             
     return render(request, 'market/new_listing.html', context)
             
+            
+            
+            
 # asset page
 def asset(request, asset_id):
     
     asset = get_object_or_404(Asset, id=asset_id)
-    
-    if request.method == "GET":
-        order_form = OrderForm()
-    
+    try:
+        reviews = ForumPost.objects.filter(asset=asset_id).reverse()
+        order_book = Offer.objects.filter(asset=asset_id)
+    except:
+        reviews = "There are no reviews for this item yet."
+        order_book = "There are no orders for this item yet."
+        
+    order_form = OrderForm()
+    review_form = NewPostForm()
+        
     if request.method == "POST":
         order_form = OrderForm(request.POST)
         
         if order_form.is_valid():
-            order = {'type':"", 
-                     'bid':"",
-                     'quantity':""}
-            order['type'] = order_form.cleaned_data['type']
-            order['bid'] = order_form.cleaned_data['bid']
-            order['quantity'] = order_form.cleaned_data['quantity']
-        
-            asset.order_book.append(order)
-            asset.save
+            order = Offer()
+            order.value = order_form.cleaned_data['value']
+            order.quantity = order_form.cleaned_data['quantity']
+            order.type = "BUY"
+            order.asset = asset_id
+            order.user = request.user
+            order.fulfilled = False
+            order.save()
             
-            return(redirect('market'))
-    
+            context = {
+                'order_form': order_form,
+                'review_form': review_form,
+                'asset': asset,
+                'reviews': reviews,
+                'order_book': order_book
+            }
+            
+            return render(request, 'market/asset.html', context)
+        
+        review_form = NewPostForm(request.POST)
+
+        if review_form.is_valid():
+            
+            review = ForumPost()
+            review.review = True
+            review.user = request.user
+            review.body = review_form.cleaned_data['body']
+            review.image = review_form.cleaned_data['image']   
+            review.asset = asset_id
+            review.save()
+            
+            context = {
+                'order_form': order_form,
+                'review_form': review_form,
+                'asset': asset,
+                'reviews': reviews,
+                'order_book': order_book
+            }
+            
+            return render(request, 'market/asset.html', context)
+        
     context = {
         'order_form': order_form,
+        'review_form': review_form,
         'asset': asset,
-        'order_book': asset.order_book
+        'reviews': reviews,
+        'order_book': order_book
     }
-    
+        
     return render(request, 'market/asset.html', context)
