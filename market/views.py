@@ -64,7 +64,7 @@ def asset(request, asset_id):
     asset = get_object_or_404(Asset, id=asset_id)
     try:
         reviews = ForumPost.objects.filter(asset=asset_id).reverse()
-        order_book = Offer.objects.filter(asset=asset_id)
+        order_book = Offer.objects.filter(asset=asset_id, fulfilled=False).order_by('value').reverse()
     except:
         reviews = "There are no reviews for this item yet."
         order_book = "There are no orders for this item yet."

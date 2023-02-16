@@ -54,10 +54,10 @@ Market
                 {% if order_book %}
                 <div class="w-10/12">
                     {% for offer in order_book %}
-                        {% if not offer.fulfilled %}
+                        <!-- {% if not offer.fulfilled %} -->
                             <p>{{ offer.value }}</p>
                             <p>{{ offer.user }}</p>
-                        {% endif %}
+                        <!-- {% endif %} -->
                     {% endfor %}
                 </div>
                 {% else %}

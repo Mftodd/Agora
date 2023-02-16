@@ -55,6 +55,21 @@ Profile - {{ user.username }}
             </div>
         </div>
         {% endif %}
+        {% if offers %}
+        <div>
+            <div>
+                <p>Outstanding offers:</p>
+                {% for offer in offers %}
+                    <div>
+                        <p>{{ offer.value }}</p>
+                        <p>{{ offer.quantity }}</p>
+                        <p>{{ offer.asset }}</p>
+                        <p>{{ offer.created_date }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 
