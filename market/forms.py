@@ -10,7 +10,7 @@ class NewListingForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Offer
-        fields = ("value","quantity")
+        fields = ("value","quantity","type")
 
     
 # buy button

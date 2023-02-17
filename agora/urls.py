@@ -23,6 +23,7 @@ urlpatterns = [
     path("", include('welcome.urls')),
     path("market/", include('market.urls')),
     path("users/", include('users.urls')),
-    path("forum/", include('forum.urls'))
+    path("forum/", include('forum.urls')),
+    path("api/v1/", include('api.urls'))
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

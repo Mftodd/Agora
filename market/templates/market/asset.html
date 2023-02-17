@@ -54,10 +54,12 @@ Market
                 {% if order_book %}
                 <div class="w-10/12">
                     {% for offer in order_book %}
-                        <!-- {% if not offer.fulfilled %} -->
-                            <p>{{ offer.value }}</p>
-                            <p>{{ offer.user }}</p>
-                        <!-- {% endif %} -->
+                        <div class="flex justify-between">
+                            <p>Type: {{ offer.type }}</p>
+                            <p>Amount: {{ offer.value }}</p>
+                            <p>Quantity: {{ offer.quantity }}</p>
+                            <p>User: {{ offer.user }}</p>
+                        </div>
                     {% endfor %}
                 </div>
                 {% else %}

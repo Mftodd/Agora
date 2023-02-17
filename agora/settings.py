@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'forum',
     'crispy_forms',
     'crispy_tailwind',
+    'rest_framework',
+    'api'
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"

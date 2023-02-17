@@ -79,11 +79,84 @@ def asset(request, asset_id):
             order = Offer()
             order.value = order_form.cleaned_data['value']
             order.quantity = order_form.cleaned_data['quantity']
-            order.type = "BUY"
+            order.type = order_form.cleaned_data['type']
             order.asset = asset_id
             order.user = request.user
-            order.fulfilled = False
             order.save()
+            
+            buy_offers = sorted(Offer.objects.filter(asset=asset_id, type="BUY", fulfilled=False, value__gt=0), key=lambda x: x.value)
+            sell_offers = sorted(Offer.objects.filter(asset=asset_id, type="SELL", fulfilled=False, value__gt=0), key=lambda x: x.value)
+            
+            matching_offer = None
+            
+            if order.type == "BUY":
+                    for sell_offer in sell_offers:
+                        if order.value >= sell_offer.value:
+                            matching_offer = sell_offer
+                            
+                            remaining = order.quantity % matching_offer.quantity
+                            if remaining > 0:
+                                order.quantity = order.quantity - matching_offer.quantity
+                                if order.quantity == 0:
+                                    order.delete()
+                                matching_offer.delete()
+                                order.save()
+                                if order.quantity <= 0:
+                                    break
+                                else:
+                                    continue
+                            else: 
+                                matching_offer.quantity = matching_offer.quantity - order.quantity
+                                if matching_offer.quantity == 0:
+                                    matching_offer.delete()
+                                order.delete()
+                                matching_offer.save()
+                            # exchange monies
+                            # exchange assets
+                            asset.user = matching_offer.user
+                            asset.price = matching_offer.value
+                            asset.save()
+                            
+                            break
+                            
+                            
+                        
+                        else:
+                            order.save()
+                    
+            elif order.type == "SELL":
+                    for buy_offer in buy_offers:
+                        if order.value <= buy_offer.value:
+                            matching_offer = buy_offer
+                            # adjust for quantities   
+                            
+                            remaining = order.quantity % matching_offer.quantity
+                            if remaining > 0:
+                                order.quantity = order.quantity - matching_offer.quantity
+                                if order.quantity == 0:
+                                    order.delete()
+                                matching_offer.delete()
+                                order.save()
+                                if order.quantity <= 0:
+                                    break
+                                else:
+                                    continue
+                            else: 
+                                matching_offer.quantity = matching_offer.quantity - order.quantity
+                                if matching_offer.quantity == 0:
+                                    matching_offer.delete()
+                                order.delete()
+                                matching_offer.save()
+                            # exchange monies
+                            # exchange assets
+                            asset.user = matching_offer.user
+                            asset.price = matching_offer.value
+                            asset.save()
+                            
+                            break
+                        
+                        else:
+                            order.save()
             
             context = {
                 'order_form': order_form,

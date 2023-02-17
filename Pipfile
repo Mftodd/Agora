@@ -10,6 +10,9 @@ web3 = "*"
 django-tailwind = "*"
 django-crispy-forms = "*"
 crispy-tailwind = "*"
+djangorestframework = "*"
+markdown = "*"
+django-filter = "*"
 
 [dev-packages]
 

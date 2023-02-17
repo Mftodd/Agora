@@ -39,6 +39,9 @@ class Offer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     fulfilled = models.BooleanField(default=False)
     
+    def __str__(self):
+        return f"{self.asset} - {self.type} ${self.value} x{self.quantity} {self.fulfilled}"
+    
 
     
 # Market
