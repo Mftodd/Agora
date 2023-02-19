@@ -53,13 +53,16 @@ Market
             <div class="w-full border-2 border-black rounded-lg my-4 p-4 max-h-[200px] overflow-scroll">
                 {% if order_book %}
                 <div class="w-10/12">
-                    {% for offer in order_book %}
+                    {% for order in order_book %}
+                        {% if order.open %}
                         <div class="flex justify-between">
-                            <p>Type: {{ offer.type }}</p>
-                            <p>Amount: {{ offer.value }}</p>
-                            <p>Quantity: {{ offer.quantity }}</p>
-                            <p>User: {{ offer.user }}</p>
+                            <p>Type: {{ order.type }}</p>
+                            <p>Amount: {{ order.price }}</p>
+                            <p>Fulfilled: {{ order.fulfilled }} of {{ order.volume }}</p>
+                            <p>User: {{ order.user }}</p>
+                            <p>Match: {{ match.user }}</p>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 {% else %}
@@ -97,7 +100,7 @@ Market
                     <img src="{{ review.image.url }}" alt="">
                     {% endif %}
                 </div>
-                <p>{{ review.created_date }}</p>
+                <p>{{ review.created }}</p>
             </div>
 
             {% endfor %}

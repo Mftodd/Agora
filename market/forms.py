@@ -1,16 +1,16 @@
 from django import forms
-from .models import Asset, Offer
+from .models import Asset, Order
 
 class NewListingForm(forms.ModelForm):
     class Meta:
         model = Asset
-        fields = ("title", "price", "image", "description")
+        fields = ("title", "value", "image", "description")
 
    
 class OrderForm(forms.ModelForm):
     class Meta:
-        model = Offer
-        fields = ("value","quantity","type")
+        model = Order
+        fields = ("type","price","volume",)
 
     
 # buy button

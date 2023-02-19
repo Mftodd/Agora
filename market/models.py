@@ -9,8 +9,9 @@ class Asset(models.Model):
     description = models.CharField(max_length=640)
     creator = models.CharField(max_length=128, blank=True)
     # todo: price should automatically update to the last transaction price
-    price = models.CharField(max_length=12, blank=True)
+    value = models.CharField(max_length=12, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
+    featured = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def __str__(self):
@@ -26,21 +27,23 @@ class Slide(models.Model):
     def __str__(self):
         return self.title
     
-class Offer(models.Model):
+class Order(models.Model):
     ORDER_TYPE = (
         ("BUY",'buy'),
         ("SELL",'Sell'),
     )
-    value = models.IntegerField(default=0)
-    quantity = models.IntegerField(default=1)
+    price = models.IntegerField(default=0)
+    volume = models.IntegerField(default=1)
+    fulfilled = models.IntegerField(default=0)
     type = models.CharField(max_length=4, choices = ORDER_TYPE, default="BUY")
     asset = models.IntegerField(null=True)
-    created_date = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    fulfilled = models.BooleanField(default=False)
+    match = None
+    open = models.BooleanField(default=True)
     
     def __str__(self):
-        return f"{self.asset} - {self.type} ${self.value} x{self.quantity} {self.fulfilled}"
+        return f"{self.asset} - {self.type} ${self.price} x{self.volume}/{self.fulfilled} {self.open}"
     
 
     
