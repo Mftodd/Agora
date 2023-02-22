@@ -12,10 +12,10 @@ Welcome!
 {% endblock %}
 
 {% block content %}
-<div class="h-screen w-screen">
+<div class="w-full h-screen -mt-24">
     <!-- Landing -->
     <div style="background-image: url('../../uploads/market/welcome-bg-img.png')"
-            class="relative bg-no-repeat bg-center bg-cover h-3/5">
+            class="relative bg-no-repeat bg-center bg-cover h-full">
 
         <div class="flex flex-col items-center justify-between h-3/4">
             <p class="mt-32 text-4xl text-gray-800">Welcome to Agora</p>
@@ -23,18 +23,6 @@ Welcome!
         </div>
     
     </div>
-
-    <div class="bg-slate-600 flex items-center justify-center border-y-4 border-gray-800">
-        <p class="text-slate-200 p-4">Get your first NFT free. <a href="">Limitations Apply.</a></p>
-    </div>
-
-    <div class="container">
-        <div>
-            <p class="text-6xl">Check out our latest</p>
-            <p>insert slideshow here.</p>
-        </div>
-    </div>
-
 </div>
 
 {% endblock %}

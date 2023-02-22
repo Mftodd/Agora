@@ -1,23 +1,23 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-slate-100">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agora</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
     {% block page_scripts %}{% endblock %}
 </head>
 <body>
-    {% include '_navbar.html' %}
-    
-    <main>
-        {% block content %}
+            {% include '_navbar.html' %}
+        <main>
+            {% block content %}
 
-        {% endblock %}
-    </main>
+            {% endblock %}
+        </main>
+        {% include '_footer.html' %}
 </body>
 </html>

@@ -22,7 +22,6 @@ def find_match(asset_id, order):
                 bid.save()
                 order.save()
 
-                
     return order.match
                 
                 
@@ -38,9 +37,9 @@ def execute_trade(order, match):
         order.open = False # close the order
         order.save()
         
-        match.fulfilled = match.fulfilled + order.volume # the match consumes the entire order vol.
-        if match.fulfilled == match.volume:
-            match.open = False
+        match.fulfilled = match.fulfilled + order.volume # the match consumes the entire order volume.
+        if match.fulfilled == match.volume: # if consuming the volume fulfills the order, 
+            match.open = False              # close the order.
         match.save()
         print(order, match)
         return order, match

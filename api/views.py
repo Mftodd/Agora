@@ -29,3 +29,6 @@ class OrderBookAPIView(APIView):
         serializer = OrderBookSerializer(order_book_data)
         return Response(serializer.data)
 
+# class AllObjectsAPIView(APIView):
+#     def get(self, request, asset_id, format=None):
+#         all_assets = 

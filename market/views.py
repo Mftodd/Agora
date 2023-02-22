@@ -11,7 +11,7 @@ from .market_functions import execute_trade, find_match
 def market(request):
     
     listings = Asset.objects.all()
-    slides = Slide.objects.all()
+    slides = Slide.objects.filter(featured=True)
     
     
     context = {
@@ -73,7 +73,7 @@ def asset(request, asset_id):
         
     order_form = OrderForm()
     review_form = NewPostForm()
-        
+    
     if request.method == "POST":
         order_form = OrderForm(request.POST)
         
