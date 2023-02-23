@@ -1,13 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load tailwind_filters %}
+
+{% block page_scripts %}
+    <script defer src="{% static 'new-listing.js' %}"></script>
+{% endblock %}
 
 {% block title %}
 New Listing
 {% endblock %}
 
 {% block content %}
-<form action="{% url 'new-listing' %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">submit</button>
-</form>
+<div class="h-[82vh]">
+    <div class="flex justify-center items-center">
+        <div class="w-96 mt-12 border-2 rounded-xl p-6 bg-slate-50">
+            <h1 class="text-center font-bold text-3xl mb-6">List a new item</h1>
+            <form action="{% url 'new-listing' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="submit w-full border-2 bg-slate-800 text-slate-50 py-3 rounded-xl mt-3 hover:bg-slate-700">
+                    Register</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

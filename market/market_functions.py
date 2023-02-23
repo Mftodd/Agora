@@ -30,7 +30,10 @@ def execute_trade(order, match):
     print(order, match)
     
     remaining_match_vol = match.volume - match.fulfilled
-                
+    asset_id = order.asset_id
+    asset = Asset.objects.get(id=asset_id)
+    
+    # adjust for volume  
     if remaining_match_vol > order.volume:
         
         order.fulfilled = order.volume # all orders are fulfilled
@@ -41,8 +44,6 @@ def execute_trade(order, match):
         if match.fulfilled == match.volume: # if consuming the volume fulfills the order, 
             match.open = False              # close the order.
         match.save()
-        print(order, match)
-        return order, match
         
     elif remaining_match_vol < order.volume:
         order.fulfilled = order.fulfilled + remaining_match_vol # the order consumes the remaining match vol
@@ -53,8 +54,6 @@ def execute_trade(order, match):
         match.fulfilled = match.volume # the match is fulfilled                          
         match.open = False # close the match in the orderbook
         match.save()
-        print(order, match)
-        return order, match
     
     else:
         order.fulfilled = order.volume
@@ -64,5 +63,6 @@ def execute_trade(order, match):
         match.fulfilled = match.volume
         match.open = False
         match.save()
-        print(order, match)
-        return order, match
+
+        
+    return order, match

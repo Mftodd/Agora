@@ -13,6 +13,7 @@ crispy-tailwind = "*"
 djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
+axios = "*"
 
 [dev-packages]
 

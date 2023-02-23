@@ -9,7 +9,7 @@ class Asset(models.Model):
     description = models.CharField(max_length=640)
     creator = models.CharField(max_length=128, blank=True)
     # todo: price should automatically update to the last transaction price
-    value = models.CharField(max_length=12, blank=True)
+    value = models.CharField(max_length=24)
     created_date = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

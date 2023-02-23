@@ -14,22 +14,27 @@ Market
 {% block content %}
     <div class="w-[1100px] mx-auto">
 
-        <a href="">Cat 1</a>
-        <a href="">Cat 2</a>
-        <a href="">Cat 3</a>
-        <a href="">Cat 4</a>
+
+        <div class="my-2 gap-8">
+            <a href="">slide 1</a>
+            <a href="">slide 2</a>
+            <a href="">slide 3</a>
+            <a href="">slide 4</a>
+        </div>
         
         <!-- slideshow container -->
-        <ul id="slideshow" class="list-none relative w-full h-[450px]">
+        <ul id="slideshow" class="list-none relative w-full h-[450px] group">
 
             <!-- generate slides -->
             {% for slide in slides %}
-                <li style="display:none" class="absolute top-0 left-0 right-0 bottom-0">
-                    <img src="{{ slide.image.url }}" alt="" class="w-full h-full rounded-lg">
-                    <div class="absolute z-10 bottom-24 left-24 text-md text-white">
-                        <p class="text-4xl font-bold py-2">{{ slide.title }}</p>
+                <li style="display:none" class="absolute w-full h-full overflow-hidden rounded-xl">
+                    <img src="{{ slide.image.url }}" alt="" class="w-full h-full group-hover:scale-105 transition ease-in-out">
+                    <div class="absolute z-10 bottom-16 left-24 text-md text-white">
+                        <p class="text-4xl font-bold py-2 shadow-inherit">{{ slide.title }}</p>
                         <p class="text-xl font-semibold pb-4">{{ slide.sub_title }}</p>
-                        <button id="explore-btn" class=" rounded-full px-8 py-2 bg-blue-900 text-white z-10 hover:bg-blue-600" href="">Explore</button>
+                        <button id="explore-btn" 
+                            class="rounded-lg px-8 py-2 backdrop-blur-sm bg-slate-50/10 text-lg font-bold text-slate-50 z-10 shadow-sm hover:bg-slate-50 hover:text-slate-900" href="">
+                            Explore</button>
                     </div>
                     <!-- <p>{{ slide.id }}</p>
                     <p>{{ slides.count }}</p> -->
@@ -37,9 +42,11 @@ Market
             {% endfor %}
 
             <!-- forward backward buttons  -->
-            <div class="pointer absolute flex items-center justify-between w-full h-full p-[16px] text-white font-bold text-lg rounded-lg">
-                <button id="prev" onclick="changeSlide(-1)">&#10094;</button>  
-                <button id="next" onclick="changeSlide(1)">&#10095;</button>  
+            <div class="hidden group-hover:flex">
+                <div class="pointer absolute flex items-center justify-between w-full h-full text-white font-bold text-lg rounded-lg">
+                    <button class="h-12 w-12 -mx-6 bg-slate-50 shadow-md text-slate-900 text-2xl rounded-full" id="prev" onclick="changeSlide(-1)">&#10094;</button>  
+                    <button class="h-12 w-12 -mx-6 bg-slate-50 shadow-md text-slate-900 text-2xl rounded-full" id="next" onclick="changeSlide(1)">&#10095;</button>  
+                </div>
             </div>
 
         </ul>
