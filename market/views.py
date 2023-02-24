@@ -1,10 +1,14 @@
+import requests, random
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from .models import Asset, Slide, Order
 from .forms import NewListingForm, OrderForm
 from forum.forms import NewPostForm
 from forum.models import ForumPost
 from django.contrib.auth.decorators import login_required
 from .market_functions import execute_trade, find_match
+from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 
 
 # market home
@@ -143,3 +147,26 @@ def asset(request, asset_id):
     }
         
     return render(request, 'market/asset.html', context)
+
+    
+def make_rs_asset(request):
+    category_id = random.randint(0,41)
+    alpha_id = random.choice('abcdefghijklmnopqrstuvwxyz')
+     
+    url = f'https://secure.runescape.com/m=itemdb_rs/api/catalogue/items.json?category={category_id}&alpha={alpha_id}&page=1'
+    print(url)
+    
+    response = requests.get(url)
+    data = response.json()
+    items = (i for i in data['items'])
+    for item in items:
+        asset = Asset()
+        asset.title = item['name']
+        asset.description = item['description']
+        asset.value = item['current']
+        asset.user = User.objects.get(username='Jagex')
+        asset.image = item['icon_large']
+        
+        asset.save()
+    
+    return HttpResponse('Asset created successfully')
