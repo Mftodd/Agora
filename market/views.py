@@ -1,4 +1,4 @@
-import requests, random
+import requests, random, re
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Asset, Slide, Order
@@ -6,7 +6,7 @@ from .forms import NewListingForm, OrderForm
 from forum.forms import NewPostForm
 from forum.models import ForumPost
 from django.contrib.auth.decorators import login_required
-from .market_functions import execute_trade, find_match
+from .market_functions import execute_trade, find_match, clean_price
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 
@@ -51,6 +51,14 @@ def new_listing(request):
             asset.user = request.user
             asset.save()
             
+            order = Order()
+            order.price = value
+            order.volume = 1
+            order.type = "SELL"
+            order.asset = asset.id
+            order.user = request.user
+            order.save()
+            
             return redirect('profile')
             
     context = {
@@ -70,10 +78,12 @@ def asset(request, asset_id):
     asset = get_object_or_404(Asset, id=asset_id)
     try:
         reviews = ForumPost.objects.filter(asset=asset_id).reverse()
-        order_book = Order.objects.filter(asset=asset_id, open=True).order_by('price').reverse()
+        order_book = Order.objects.filter(asset=asset_id, open=True).order_by('price', 'created').reverse()
+        order_history = Order.objects.filter(asset=asset_id, open=False).order_by('price', 'created').reverse()
     except:
         reviews = "There are no reviews for this item yet."
         order_book = "There are no orders for this item yet."
+        order_history = ""
         
     order_form = OrderForm()
     review_form = NewPostForm()
@@ -163,10 +173,23 @@ def make_rs_asset(request):
         asset = Asset()
         asset.title = item['name']
         asset.description = item['description']
-        asset.value = item['current']
         asset.user = User.objects.get(username='Jagex')
-        asset.image = item['icon_large']
+        
+        image_url = item['icon_large']
+        image_response = requests.get(image_url)
+        asset.image.save(f"{item['id']}.png", ContentFile(image_response.content))
         
         asset.save()
+        print(f"{asset.id} - {asset}")
+        
+        
+        order = Order()
+        order.price = clean_price(item['current']['price'])
+        order.volume = item['id']
+        order.type = "SELL"
+        order.asset = asset.id
+        order.user = User.objects.get(username='Jagex')
+        order.save()
+        print(order)
     
     return HttpResponse('Asset created successfully')

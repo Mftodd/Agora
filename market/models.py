@@ -4,11 +4,8 @@ from django.contrib.auth.models import User
 # Listing
 class Asset(models.Model):
     title = models.CharField(max_length=64)
-    # todo: image
     image = models.ImageField(upload_to="market/", blank=True) 
     description = models.CharField(max_length=640)
-    creator = models.CharField(max_length=128, blank=True)
-    # todo: price should automatically update to the last transaction price
     value = models.CharField(max_length=24)
     created_date = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
@@ -32,7 +29,7 @@ class Order(models.Model):
         ("BUY",'buy'),
         ("SELL",'Sell'),
     )
-    price = models.IntegerField(default=0)
+    price = models.IntegerField()
     volume = models.IntegerField(default=1)
     fulfilled = models.IntegerField(default=0)
     type = models.CharField(max_length=4, choices = ORDER_TYPE, default="BUY")

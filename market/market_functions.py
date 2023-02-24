@@ -1,4 +1,4 @@
-import requests, random
+import requests, random, re
 from .models import Order, Asset
 
 
@@ -66,6 +66,12 @@ def execute_trade(order, match):
 
         
     return order, match
+
+def clean_price(price_str):
+    if any(c.isalpha() or c in {',','.'} for c in price_str):
+        
+        price_str = re.sub(r'[^\d]', '', price_str)
+    return price_str
 
 
     
