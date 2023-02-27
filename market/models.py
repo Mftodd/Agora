@@ -6,7 +6,7 @@ class Asset(models.Model):
     title = models.CharField(max_length=64)
     image = models.ImageField(upload_to="market/", blank=True) 
     description = models.CharField(max_length=640)
-    value = models.CharField(max_length=24)
+    value = models.IntegerField()
     created_date = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

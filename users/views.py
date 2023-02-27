@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm, SettingsForm
 from django.contrib.auth import authenticate, login as user_login, logout as user_logout
 from django.contrib.auth.decorators import login_required
-from .models import Wallet
+from .models import Profile
 from market.models import Asset, Order
 from forum.models import ForumPost
 from django.contrib.auth.models import User
@@ -29,11 +29,15 @@ def signup(request):
 
                     user.username = username
                     user.email = email
-                    user.wallet = Wallet.account
                     user.set_password(password)
                     user.save()
+                    
+                    profile = Profile()
+                    profile.user = user
+                    profile.save()
+                    
                     user_login(request, user)
-                    return redirect('profile')
+                    return redirect(f'/users/profile/{user.id}')
     
     return render(request, "users/signup.html", {'form':form})
 
@@ -58,7 +62,7 @@ def login(request):
             
             if user is not None:
                 user_login(request, user)
-                return redirect('profile')
+                return redirect(f'/users/profile/{user.id}')
     
     return render(request, "users/login.html", {'form':form})
 
@@ -70,20 +74,24 @@ def logout(request):
     return redirect('welcome')
 
 # Profile
-@login_required
-def profile(request):
-    user = request.user
-    assets = Asset.objects.filter(user=user)
-    posts = ForumPost.objects.filter(user=user)
-    orders = Order.objects.filter(user=user)
+def profile(request, profile_id):
+    
+    account = User.objects.get(id=profile_id)
+    
+    profile = Profile.objects.get(user=account)
+    assets = Asset.objects.filter(user=profile.user)
+    featured = assets.filter(featured=True)
+    posts = ForumPost.objects.filter(user=profile.user)
+    orders = Order.objects.filter(user=profile.user)
     
     # todo: need to save these to the user profile somehow.
     # address = Wallet.account.address
     # key = Wallet.account.key 
     # balance = w3.eth.get_balance(address)
     context = {
-        'user': user,
+        'profile': profile,
         'assets': assets,
+        'featured': featured,
         'posts': posts,
         'orders': orders,
         # 'key': key,   
@@ -92,3 +100,41 @@ def profile(request):
     # print(Wallet.account.key)
 
     return render(request, "users/profile.html", context)
+
+@login_required
+def settings(request):
+    user = request.user
+    profile = get_object_or_404(Profile.objects.filter(user=user))
+    
+    if request.method == "GET":
+        form = SettingsForm()
+        
+    else: 
+        form = SettingsForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            avatar = form.cleaned_data['avatar']
+            shop_bg_photo = form.cleaned_data['shop_bg_photo']
+            about_me = form.cleaned_data['about_me']
+            web3_address = form.cleaned_data['web3_address']
+            
+            if avatar:
+                profile.avatar = avatar
+            if shop_bg_photo:
+                profile.shop_bg_photo = shop_bg_photo 
+            if about_me: 
+                profile.about_me = about_me
+            if web3_address: 
+                profile.web3_address = web3_address
+            profile.save()
+            
+        return redirect(f'/users/profile/{user.id}')
+    
+ 
+    context = {
+        'user': user,
+        'profile': profile,
+        'form': form,
+    }
+    
+    return render(request, "users/settings.html", context)

@@ -1,5 +1,3 @@
-
-
 // featured items carousel
 let slideshow = document.querySelector('#slideshow')
 let slides = slideshow.getElementsByTagName('li')
@@ -26,4 +24,4 @@ function showSlides(n) {
     }
     
     slides[slideIndex-1].style.display='block';
-};
+}

@@ -17,29 +17,32 @@ The Forum - Agora
 <div class="w-[600px] min-h-screen border-x-2 border-x-neutral-300 mx-auto">
 
     <!-- comment box -->
-    <div class="border-y-2 border-x-neutral-300">
-        <form action="{% url 'compose' %}" method="POST">
+    <div class="border-b-2 border-x-neutral-300">
+        <form action="{% url 'compose' %}" method="POST" class="w-10/12 mx-auto mb-4">
             {% csrf_token %}
             {{ form|crispy }}
-            <button type="submit">POST!</button>
+            <button type="submit" class="w-full border-2 bg-slate-800 text-slate-50 py-3 rounded-xl mt-3 hover:bg-slate-700">POST!</button>
         </form>
     </div>
 
     <!-- Feed -->
     <div>
         {% for post in feed %}
-        <div>
-            <div><img src="" alt="profile-photo"></div>
-            <p>{{ post.user.username }}</p>
-            <div>
-                <p>{{ post.body }}</p>
-                {% if post.image %}
-                <img src="{{ post.image.url }}" alt="">
-                {% endif %}
+        <div class="flex flex-col relative border-slate-200 border-b-2 py-6 px-10 gap-2 bg-slate-50 text-slate-800">
+            <div class="w-20 h-20 absolute left-0 top-0 rounded-full m-4 border-slate-400 border-4 bg-slate-100 overflow-hidden">
+                <img src="" alt="profile-photo" class="object-cover w-full h-full">
             </div>
-            <p>{{ post.created_date }}</p>
-        </div>
+            <div class="ml-20 text-slate-500">
+                <p class="text-sm font-extrabold">{{ post.user.username }}</p>
+                <p class="text-xl font-semibold text-slate-900">{{ post.body }}</p>
+                
+                {% if post.image %}
+                <img src="{{ post.image }}" alt="">
+                {% endif %}
 
+                <p class="text-xs font-bold">{{ post.created }}</p>
+            </div>
+        </div>
         {% endfor %}
     </div>
 

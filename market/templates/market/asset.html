@@ -7,20 +7,17 @@
 {% endblock %}
 
 
+
 {% block title %}
 Market
 {% endblock %}
 
 {% block content %}
-<!-- two columns one item summary includes picture & description 
-    one item main includes bidding section-->
-    
-    
 
-<div class="grid grid-cols-12 max-w-[1600px]">
 
+<div class="w-full"> 
     <!-- order form -->
-    <div class="col-start-9 col-end-12 sticky top-28">
+    <div class="fixed top-24 right-36">
         <div class="flex justify-center items-center">
             <div class=" w-72 border-2 rounded-xl p-6 bg-slate-50">
                 <h1 class="text-center font-bold text-2xl">Order</h1>
@@ -34,116 +31,119 @@ Market
         </div>
     </div>
 
-    <!-- main feed -->
-    <div class="col-start-3 col-end-9">
+    <div class="flex justify-center">
 
-        <div class="flex flex-col mx-auto">        
-            <!-- asset banner -->
-            <div class="flex flex-col relative border-slate-200 border-2 rounded-t-xl py-6 px-10 gap-2 bg-slate-50 text-slate-800">
-                <p class="text-sm font-extrabold">{{ asset.user.username }}</p>
-                <p class="text-2xl font-semibold">{{ asset.title }}</p>
-                <p class="text-xl font-bold">{{ asset.value }}</p>
-                <div class="w-40 h-40 absolute right-0 top-0 rounded-full m-4 border-slate-400 border-8 bg-slate-100 overflow-hidden">
-                    <img src="{{ asset.image.url }}" alt="asset-image" class="object-cover w-full h-full">
-                </div>
-            </div>
-            
-            <div class="w-full h-32 border-x-2 border-slate-200 bg-slate-50 py-6 px-10">
-                <p class="text-xs font-bold mb-2">Description:</p>
-                <p class="text-md font-medium">{{ asset.description }}</p>
-            </div>
-            
-        <div>
-            <!-- order book -->
-            <div class="w-full border-2 h-40 border-slate-200 overflow-hidden bg-slate-50 rounded-b-xl">
-                {% if order_book %}
-                <div class="grid grid-cols-2 h-full">
-                    <div class="h-full">
-                        <h1 class="font-bold text-center border-b-2 border-r-2 border-slate-200">Bid</h1>
-                        <table class="table-fixed w-full text-center">
-                            <tbody class="divide-y divide-slate-200">
-                            {% for order in order_book %}
-                                {% if order.open and order.type == "BUY" %}
-                                <tr class="">
-                                    <td>{{ order.fulfilled }} / {{ order.volume }}</td>
-                                    <td>${{ order.price }}</td>
-                                </tr>
-                                {% endif %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="h-full">
-                        <h1 class="font-bold text-center border-b-2 border-slate-200">Ask</h1>
-                        <table class="table-fixed w-full text-center">
-                            <tbody class="divide-y divide-slate-200">
-                            {% for order in order_book %}
-                                {% if order.open and order.type == "SELL" %}
-                                <tr class="">
-                                    <td>${{ order.price }}</td>
-                                    <td>{{ order.fulfilled }} / {{ order.volume }}</td>
-                                </tr>
-                                {% endif %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
+        <!-- main feed -->
+        <div class="w-6/12 mr-36 mt-4">
+
+            <div class="flex flex-col mx-auto">        
+                <!-- asset banner -->
+                <div class="flex flex-col relative border-slate-200 border-2 rounded-t-xl py-6 px-10 gap-2 bg-slate-50 text-slate-800">
+                    <p class="text-sm font-extrabold">{{ asset.user.username }}</p>
+                    <p class="text-2xl font-semibold">{{ asset.title }}</p>
+                    <p class="text-xl font-bold">{{ asset.value }}</p>
+                    <div class="w-40 h-40 absolute right-0 top-0 rounded-full m-4 border-slate-400 border-8 bg-slate-100 overflow-hidden">
+                        <img src="{{ asset.image.url }}" alt="asset-image" class="object-cover w-full h-full">
                     </div>
                 </div>
-                {% else %}
-                    <h1 class="text-center mt-10 font-bold">The order book is empty</h1>
-                {% endif %}
                 
-            </div>
-
-            
-            <!-- make review -->
-            <div class="group border-2 mt-2 border-slate-200 ">
-                <div class="flex justify-between px-6 py-2">
-                    <button id="review-btn" class="w-full font-bold text-2xl flex">Create review</button>
-                    <button id="review-btn" class="h-8 w-8 bg-slate-50 text-slate-900 text-xl rounded-full">⋁</button> 
+                <div class="w-full h-32 border-x-2 border-slate-200 bg-slate-50 py-6 px-10">
+                    <p class="text-xs font-bold mb-2">Description:</p>
+                    <p class="text-md font-medium">{{ asset.description }}</p>
                 </div>
-                <div id="content" class="hidden w-full border-b-2 border-slate-200 group-hover:flex justify-center items-center">
-                    <form action="{% url 'asset' asset.id %}" method="POST" class="w-8/12">
-                        {% csrf_token %}
-                        {{ review_form|crispy }}
-                        <button type="submit">POST!</button>
-                    </form>
-                </div>
-            </div>
-        
-        
-            <!-- Feed -->
-            <div class="w-full min-h-screen border-x-2 border-x-slate-200 mx-auto">
-                <div class="w-full">
-                    {% if reviews %}
-                    {% for review in reviews %}
-                    <div>
-                        <div><img src="" alt="profile-photo"></div>
-                        <p>{{ review.user.username }}</p>
-                        <div>
-                            <p>{{ review.body }}</p>
-                            {% if review.image %}
-                            <img src="{{ review.image.url }}" alt="">
-                            {% endif %}
+                
+            <div>
+                <!-- order book -->
+                <div class="w-full border-2 h-40 border-slate-200 overflow-hidden bg-slate-50 rounded-b-xl">
+                    {% if order_book %}
+                    <div class="grid grid-cols-2 h-full">
+                        <div class="h-full">
+                            <h1 class="font-bold text-center border-b-2 border-r-2 border-slate-200">Bid</h1>
+                            <table class="table-fixed w-full text-center">
+                                <tbody class="divide-y divide-slate-200">
+                                {% for order in order_book %}
+                                    {% if order.open and order.type == "BUY" %}
+                                    <tr class="">
+                                        <td>{{ order.fulfilled }} / {{ order.volume }}</td>
+                                        <td>${{ order.price }}</td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                        <p>{{ review.created }}</p>
+                        <div class="h-full">
+                            <h1 class="font-bold text-center border-b-2 border-slate-200">Ask</h1>
+                            <table class="table-fixed w-full text-center">
+                                <tbody class="divide-y divide-slate-200">
+                                {% for order in order_book %}
+                                    {% if order.open and order.type == "SELL" %}
+                                    <tr class="">
+                                        <td>${{ order.price }}</td>
+                                        <td>{{ order.fulfilled }} / {{ order.volume }}</td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    {% endfor %}
+                    {% else %}
+                        <h1 class="text-center mt-10 font-bold">The order book is empty</h1>
                     {% endif %}
+                    
                 </div>
+
+                
+                <!-- make review -->
+                <div class="group border-2 mt-2 border-slate-200 rounded-t-xl">
+                    <div class=" w-full flex px-6 py-2">
+                        <h1 class="font-bold text-2xl">Reviews</h1>
+                        <button id="drop-btn" class="h-6 w-6 mx-3 my-auto bg-slate-50 text-slate-900 text-md font-extrabold rounded-full hover:bg-slate-200">+</button> 
+                    </div>
+                    <div id="drop-content" class="hidden w-full border-slate-200 justify-center items-center">
+                        <form action="{% url 'asset' asset.id %}" method="POST" class="w-8/12 py-4">
+                            {% csrf_token %}
+                            {{ review_form|crispy }}
+                            <button type="submit" class="w-full border-2 bg-slate-800 text-slate-50 py-3 rounded-xl mt-3 hover:bg-slate-700">POST!</button>
+                        </form>
+                    </div>
+                </div>
+            
+            
+                <!-- Feed -->
+                <div class="w-full h-96 border-x-2 border-x-slate-200 mx-auto">
+                    <div class="w-full">
+                        {% if reviews %}
+                        {% for review in reviews %}
+                            <div class="flex flex-col relative border-slate-200 border-b-2 py-6 px-10 gap-2 bg-slate-50 text-slate-800">
+                                <div class="w-20 h-20 absolute left-0 top-0 rounded-full m-4 border-slate-400 border-4 bg-slate-100 overflow-hidden">
+                                    <img src="" alt="profile-photo" class="object-cover w-full h-full">
+                                </div>
+                                <div class="ml-20 text-slate-500">
+                                    <p class="text-sm font-extrabold">{{ review.user.username }}</p>
+                                    <p class="text-xl font-semibold text-slate-900">{{ review.body }}</p>
+                                    
+                                    {% if review.image %}
+                                    <img src="{{ review.image }}" alt="">
+                                    {% endif %}
+
+                                    <p class="text-xs font-bold">{{ review.created }}</p>
+                                </div>
+                            </div>
+                        
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
+
             </div>
-
-
         </div>
+
     </div>
+
+
 </div>
-        
-    <!-- Comment Box -->
-
-
-
-
-
-</div>    
 
 {% endblock %}

@@ -1,79 +1,49 @@
 {% extends 'base.html' %}
+{% load tailwind_filters %}
 
 {% block title %}
 Profile - {{ user.username }}
 {% endblock %}
 
-<!-- # Profile:
-# account Address
-# Private key (hidden)
-# balance for the wallet -->
-
 {% block content %}
-<h3>Welcome back, {{ user.username }}</h3>
-<h1>Balance: {{ balance }}</h1>
-<!-- todo:  acct address copy to clipboard button -->
-<h4 id="address">Account</h4>
-{{ address }}<br>
-<!-- todo: hide private key behind button/fog effect -->
-<h4>Private Key</h4>
-{{ key }}
-<!-- todo: asset inventory -->
-<!-- todo: transaction history -->
-
-<div class="w-full min-h-screen border-x-2 border-x-neutral-300 mx-auto">
+<div class="max-w-[1200px] min-h-screen border-x-2 border-x-neutral-300 mx-auto">
     <div class="w-full">
-        {% if posts %}
-        <div>
-            <div>
-                <p>Posts:</p>
-                {% for post in posts %}
-                    <div>
-                        <p>{{ post.body }}</p>
-                        {% if post.image %}
-                        <img src="{{ post.image.url }}" alt="">
-                        {% endif %}
-                        <p>{{ post.created_date }}</p>
-                    </div>
-                {% endfor %}
+
+        <!-- profile header -->
+        <div class="flex flex-col h-72 relative border-slate-200 border-b-2 gap-2 bg-gradient-to-b from-slate-800 to-slate-600 text-slate-800 shadow-inner">
+            {% if profile.shop_bg_photo %}
+            <div class=" w-full h-full overflow-hidden">
+                <img src="{{ profile.shop_bg_photo.url }}" alt="profile-photo" class="w-full h-full object-cover">
+            </div>
+            {% endif %}
+
+            <div class="w-40 h-40 absolute left-12 -bottom-16 rounded-xl m-4 border-slate-400 border-4 bg-slate-100 overflow-hidden z-10">
+                <img src="{{ profile.avatar.url }}" alt="profile-photo" class="object-cover w-full h-full">
             </div>
         </div>
-        {% endif %}
-        {% if assets %}
-        <div>
-            <div>
-                <p>Assets:</p>
+
+        <div class="w-full min-h-32 border-b-2 border-slate-200 bg-slate-50">
+            <p class="text-2xl font-bold py-4 ml-64">{{ profile.user.username }}</p>
+            <p class="text-md font-medium ml-24 mr-24 pb-4">{{ profile.about_me }}</p>
+        </div>
+
+
+        
+        <div class="w-full bg-slate-50 group">
+            {% if assets %}
+            <p class="text-xl font-semibold px-12 pt-4">Shop</p>
+            <div class="flex flex-wrap h-[600px] overflow-scroll">
                 {% for asset in assets %}
-                    <div>
-                        <p>{{ asset.body }}</p>
-                        {% if asset.image %}
-                        <img src="{{ asset.image.url }}" alt="">
-                        {% endif %}
-                        <p>{{ asset.created_date }}</p>
-                    </div>
+                <a class="bg-slate-50 mx-4 my-4 flex w-48 h-64 flex-col p-3 rounded-md hover:shadow-lg hover:scale-105 transition ease-in-out group border-2 border-slate-200" href="{% url 'asset' asset.id %}">
+                    <p class="h-1/6 text-ellipsis text-lg text-slate-900 font-semibold">{{ asset.title }}</p>
+                    <img src="{{asset.image.url}}" alt="" class="w-full rounded-md object-cover overflow-hidden ">
+                    <p class="text-2xl text-slate-900 flex items-center"><img src="/uploads/market/eth-glyph-colored.png" class="h-6 mx-1">{{ asset.value }}</p>          
+                </a>
                 {% endfor %}
             </div>
+            {% endif %}
         </div>
-        {% endif %}
-        {% if offers %}
-        <div>
-            <div>
-                <p>Outstanding offers:</p>
-                {% for offer in offers %}
-                    <div>
-                        <p>{{ offer.value }}</p>
-                        <p>{{ offer.quantity }}</p>
-                        <p>{{ offer.asset }}</p>
-                        <p>{{ offer.created_date }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
     </div>
 </div>
-
-
-
 
 {% endblock %}

@@ -1,4 +1,5 @@
 from django import forms
+from .models import Profile
 
 class LoginForm(forms.Form):
     
@@ -20,3 +21,8 @@ class SignUpForm(LoginForm):
         max_length= 32,
         )
     email = forms.EmailField()
+    
+class SettingsForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ("avatar", "shop_bg_photo", "about_me", "web3_address")

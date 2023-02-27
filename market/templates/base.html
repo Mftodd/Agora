@@ -11,15 +11,15 @@
     <link rel="stylesheet" href="{% static 'main.css' %}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js" integrity="sha512-L4lHq2JI/GoKsERT8KYa72iCwfSrKYWEyaBxzJeeITM9Lub5vlTj8tufqYk056exhjo2QDEipJrg6zen/DDtoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    {% block page_scripts %}{% endblock %}
 </head>
 <body>
-            {% include '_navbar.html' %}
-        <main>
-            {% block content %}
-
-            {% endblock %}
-        </main>
-        {% include '_footer.html' %}
+    {% include '_navbar.html' %}
+    <main>
+        {% block content %}
+        
+        {% endblock %}
+    </main>
+    {% include '_footer.html' %}
 </body>
+{% block page_scripts %}{% endblock %}
 </html>

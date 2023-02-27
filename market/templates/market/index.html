@@ -12,29 +12,28 @@ Market
 {% endblock %}
 
 {% block content %}
-    <div class="w-[1100px] mx-auto">
+    <div class="w-[1200px] mx-auto">
 
 
-        <div class="my-2 gap-8">
-            <a href="">slide 1</a>
-            <a href="">slide 2</a>
-            <a href="">slide 3</a>
-            <a href="">slide 4</a>
+        <div class="my-2 ml-4">
+            {% for profile in featured_profiles %}
+            <a href="" class="mr-4 font-extrabold">{{ profile.user.username }}</a>
+            {% endfor %}
         </div>
         
         <!-- slideshow container -->
         <ul id="slideshow" class="list-none relative w-full h-[450px] group">
 
             <!-- generate slides -->
-            {% for slide in slides %}
+            {% for profile in featured_profiles %}
                 <li style="display:none" class="absolute w-full h-full overflow-hidden rounded-xl">
-                    <img src="{{ slide.image.url }}" alt="" class="w-full h-full group-hover:scale-105 transition ease-in-out">
-                    <div class="absolute z-10 bottom-16 left-24 text-md text-white">
-                        <p class="text-4xl font-bold py-2 shadow-inherit">{{ slide.title }}</p>
-                        <p class="text-xl font-semibold pb-4">{{ slide.sub_title }}</p>
-                        <button id="explore-btn" 
-                            class="rounded-lg px-8 py-2 backdrop-blur-sm bg-slate-50/10 text-lg font-bold text-slate-50 z-10 shadow-sm hover:bg-slate-50 hover:text-slate-900" href="">
-                            Explore</button>
+                    {% if profile.shop_bg_photo %}
+                        <img src="{{ profile.shop_bg_photo.url }}" alt="" class="min-h-full object-cover group-hover:scale-105 transition ease-in-out brightness-90">
+                    {% endif %}
+                    <div class="absolute z-10 bottom-16 left-24 text-md text-white rounded-xl">
+                        <p class="text-4xl font-bold py-2 shadow-md mb-4">{{ profile.user.username }}</p>
+                        <a class="rounded-lg px-8 py-2 backdrop-blur-xl bg-slate-200/30 text-lg font-bold text-slate-50 z-10 shadow-md hover:bg-slate-50 hover:text-slate-900" href="{% url 'profile' profile.user.id %}">
+                            Explore</a>
                     </div>
                     <!-- <p>{{ slide.id }}</p>
                     <p>{{ slides.count }}</p> -->
@@ -52,21 +51,18 @@ Market
         </ul>
         
         <!-- listings -->
-        <p class="text-3xl font-bold my-6">FEATURED LISTINGS</p>
+        <p class="text-3xl font-bold my-6">ALL</p>
         <div class="flex w-full justify-center items-center 2xl:px-20">
 
-            <div class="flex flex-wrap justify-center items-center">
-                
+            <div class="w-full flex flex-wrap justify-center items-center">
                 {% for listing in listings %}
                 <!-- listing card -->
-                <a class="bg-slate-600 mx-2 flex flex-1 min-w-[200px] max-w-[250px] flex-col p-3 rounded-md hover:shadow-2xl" href="{% url 'asset' listing.id %}">
-                    <p class="text-xs text-slate-200">{{ listing.user.username }}</p>
-                    <p class="text-xl text-slate-200">{{ listing.title }}</p>
-                    <p class="text-2xl text-slate-200 flex items-center"><img src="../../../uploads/market/eth-glyph-colored.png" class="h-6 mx-1">{{ listing.price }}</p>          
-                    <img src="{{listing.image.url}}" alt="" class="h-48 rounded-md shadow-lg object-cover">
-                </a>
+                    <a class="bg-slate-50 mx-4 my-4 flex w-48 h-64 flex-col p-3 rounded-md hover:shadow-lg hover:scale-105 transition ease-in-out group border-2 border-slate-200" href="{% url 'asset' listing.id %}">
+                        <p class="h-1/6 text-lg text-slate-900 font-semibold overflow-hidden whitespace-nowrap overflow-ellipsis">{{ listing.title }}</p>
+                        <img src="{{listing.image.url}}" alt="" class="w-full h-full rounded-md object-cover overflow-hidden ">
+                        <p class="text-2xl text-slate-900 flex items-center"><img src="/uploads/market/eth-glyph-colored.png" class="h-6 mx-1">{{ listing.value }}</p>          
+                    </a>
                 {% endfor %}
-            
             </div>
         </div>
 

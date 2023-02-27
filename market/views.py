@@ -2,6 +2,7 @@ import requests, random, re
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Asset, Slide, Order
+from users.models import Profile
 from .forms import NewListingForm, OrderForm
 from forum.forms import NewPostForm
 from forum.models import ForumPost
@@ -15,12 +16,11 @@ from django.core.files.base import ContentFile
 def market(request):
     
     listings = Asset.objects.all()
-    slides = Slide.objects.filter(featured=True)
-    
+    featured_profiles = Profile.objects.filter(featured=True)
     
     context = {
         'listings': listings,
-        'slides': slides
+        'featured_profiles': featured_profiles
     }
     
     return render(request, 'market/index.html', context)
@@ -105,7 +105,7 @@ def asset(request, asset_id):
             while order.fulfilled < order.volume:
                 match = find_match(asset_id, order)
                 if match:
-                    
+                    if match.open:                    
                         print("Match: True")
                         execute_trade(order, match)
                         
@@ -173,6 +173,7 @@ def make_rs_asset(request):
         asset = Asset()
         asset.title = item['name']
         asset.description = item['description']
+        asset.value = clean_price(item['current']['price'])
         asset.user = User.objects.get(username='Jagex')
         
         image_url = item['icon_large']

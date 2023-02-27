@@ -10,7 +10,7 @@
         <div class="flex flex-row justify-center items-center gap-5 text-slate-900">
             <a class="flex justify-center items-center gap-2" href="{% url 'welcome' %}">                
                 <h1 class="">Agora</h1>
-                <img class="w-8" src="../../uploads/market/70888.png" alt="logo"></a>
+                <img class="w-8" src="/uploads/market/70888.png" alt="logo"></a>
             <a class="hover:text-slate-500" href="{% url 'market' %}">Market</a>
             <a class="hover:text-slate-500" href="{% url 'forum' %}">Community</a>
 
@@ -25,17 +25,17 @@
             <a class="px-4 py-2 border-solid border-[1px] border-white rounded-full hover:text-slate-500" href="{% url 'login' %}">Login</a>
             <a class="px-4 py-2 text-slate-100 bg-slate-800 rounded-full hover:bg-slate-700" href="{% url 'signup' %}">Sign Up</a>
             {% else %}
-            <a href="{% url 'profile' %}" class="hover:text-slate-500">{{ user.username }}</a>
+            <a href="{% url 'profile' user.id %}" class="hover:text-slate-500">{{ user.username }}</a>
             <div id="user-dropdown" class="group">
                 <button id="dropbtn" class="relative">
-                    <img src="../../uploads/users/default_img.png" alt="profile_photo" class="w-8">
+                    <img src="/uploads/users/default_img.png" alt="profile_photo" class="w-8">
                 </button>
                 <div id="dropdown-content"
                     class="hidden absolute bg-slate-100 text-slate-800 text-center w-36 right-0 shadow-xl z-50 group-hover:block rounded-lg border-2 border-slate-300"
                     >
                     <a href="{% url 'new-listing' %}" class="block mt-2 hover:bg-slate-500 hover:text-slate-50">
                         Create</a>
-                    <a href="" class="block mt-2 hover:bg-slate-500 hover:text-slate-50">
+                    <a href="{% url 'settings' %}" class="block mt-2 hover:bg-slate-500 hover:text-slate-50">
                         Settings</a>
                     <a href="{% url 'logout' %}" class="block my-2 hover:bg-slate-500 hover:text-slate-50">
                         Logout</a>

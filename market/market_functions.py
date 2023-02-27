@@ -30,8 +30,10 @@ def execute_trade(order, match):
     print(order, match)
     
     remaining_match_vol = match.volume - match.fulfilled
-    asset_id = order.asset_id
-    asset = Asset.objects.get(id=asset_id)
+    asset = Asset.objects.get(id=order.asset)
+    asset.value = order.price
+    asset.save()
+    
     
     # adjust for volume  
     if remaining_match_vol > order.volume:
@@ -44,6 +46,7 @@ def execute_trade(order, match):
         if match.fulfilled == match.volume: # if consuming the volume fulfills the order, 
             match.open = False              # close the order.
         match.save()
+        return order, match, asset
         
     elif remaining_match_vol < order.volume:
         order.fulfilled = order.fulfilled + remaining_match_vol # the order consumes the remaining match vol
@@ -54,6 +57,7 @@ def execute_trade(order, match):
         match.fulfilled = match.volume # the match is fulfilled                          
         match.open = False # close the match in the orderbook
         match.save()
+        return order, match, asset
     
     else:
         order.fulfilled = order.volume
@@ -63,6 +67,7 @@ def execute_trade(order, match):
         match.fulfilled = match.volume
         match.open = False
         match.save()
+        return order, match, asset
 
         
     return order, match
@@ -72,20 +77,3 @@ def clean_price(price_str):
         
         price_str = re.sub(r'[^\d]', '', price_str)
     return price_str
-
-
-    
-    # {"item":
-    #     {"icon":"https://secure.runescape.com/m=itemdb_rs/1676891636981_obj_sprite.gif?id=21787",
-    #      "icon_large":"https://secure.runescape.com/m=itemdb_rs/1676891636981_obj_big.gif?id=21787",
-    #      "id":21787,
-    #      "type":"Miscellaneous",
-    #      "typeIcon":"https://www.runescape.com/img/categories/Miscellaneous",
-    #      "name":"Steadfast boots",
-    #      "description":"A pair of powerful-looking boots.",
-    #      "current":{"trend":"neutral","price":"2.5m"},
-    #      "today":{"trend":"negative","price":"- 24.5k"},
-    #      "members":"true",
-    #      "day30":{"trend":"negative","change":"-2.0%"},
-    #      "day90":{"trend":"positive","change":"+21.0%"},
-    #      "day180":{"trend":"positive","change":"+26.0%"}}}
